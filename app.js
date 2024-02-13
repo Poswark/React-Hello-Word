@@ -1,9 +1,9 @@
-import { RJSFSchema } from '@rjsf/utils';
-import validator from '@rjsf/validator-ajv8';
-
-const schema: RJSFSchema = {
-  title: 'Test form',
-  type: 'string',
-};
-
-render(<Form schema={schema} validator={validator} />, document.getElementById('app'));
+const http = require('http');
+const server = http.createServer((req, res) => {
+ res.writeHead(200, { 'Content-Type': 'text/plain' });
+ res.end('Hello, Word Node.js App!\n');
+});
+const port = 3000;
+server.listen(port, () => {
+ console.log(`Server running at http://localhost:${port}`);
+});
