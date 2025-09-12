@@ -1,9 +1,10 @@
 # Etapa 1: Build de la aplicación
-FROM node:22-alpine AS builder
+ARG NODE=22.19.0-slim
+FROM node:22.19.0-slim AS builder
 
 # Establecer variables de entorno
-ENV NODE_ENV=production
-ENV VERSION=0.2.2
+ARG NODE_ENV=development
+ENV VERSION=1.2.3
 
 WORKDIR /app
 
@@ -15,10 +16,14 @@ COPY package*.json ./
 RUN npm i --verbose --legacy-peer-deps --frozen-lockfile
 
 
-
 # Copiar código fuente
 COPY . .
 
+
+## Pruebas unitarias 
+#RUN npm test -- --watchAll=false
+
+RUN node --max-old-space-size=4096 ./node_modules/jest/bin/jest.js --config=jest.config.js --coverage --detectOpenHandles --forceExit --runInBand --silent --ci
 # Construir la aplicación con la variable de versión
 RUN REACT_APP_VERSION=$VERSION npm run build 
 
